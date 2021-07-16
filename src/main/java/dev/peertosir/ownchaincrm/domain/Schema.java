@@ -79,4 +79,12 @@ public class Schema {
     public void setDeveloper(String developer) {
         this.developer = developer;
     }
+
+    public Schema updateWith(Schema schema) {
+        this.setVendorCode(schema.getVendorCode());
+        this.setTitle(schema.getTitle());
+        this.setVendorCode(schema.getVendorCode());
+        this.setDeveloper(schema.getDeveloper());
+        return this;
+    }
 }

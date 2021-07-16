@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,5 +33,22 @@ public class SchemaServiceImpl implements SchemaService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schema with ID: " + id + "not found");
     }
 
+    @Override
+    public int createSchema(Schema schema) {
+        return schemaRepository.save(schema).getId();
+    }
+
+    @Override
+    public void deleteSchema(int id) {
+        Schema schema = getSchemaById(id);
+        schemaRepository.delete(schema);
+    }
+
+    @Override
+    public int updateDetail(Schema updatedSchema, int id) {
+        Schema schema = getSchemaById(id).updateWith(updatedSchema);
+        schemaRepository.save(schema);
+        return id;
+    }
 
 }

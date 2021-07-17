@@ -1,21 +1,24 @@
 package dev.peertosir.ownchaincrm.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 public class DetailSchema {
 
-
     @EmbeddedId
     private DetailSchemaId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("schemaId")
+    @JsonBackReference("schema-details")
     private Schema schema;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("detailId")
+    @JsonBackReference("details-schema")
     private Detail detail;
 
     @Column(name = "amount")
@@ -33,11 +36,6 @@ public class DetailSchema {
 
     public DetailSchemaId getId() {
         return id;
-    }
-
-
-    public void setId(DetailSchemaId id) {
-        this.id = id;
     }
 
     public Schema getSchema() {

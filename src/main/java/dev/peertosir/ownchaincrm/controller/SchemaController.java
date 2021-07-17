@@ -1,6 +1,7 @@
 package dev.peertosir.ownchaincrm.controller;
 
 import dev.peertosir.ownchaincrm.domain.Schema;
+import dev.peertosir.ownchaincrm.dto.request.DetailSchemaRequestDto;
 import dev.peertosir.ownchaincrm.service.SchemaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class SchemaController {
     @PutMapping("/{id}")
     public int updateSchema(@Valid @RequestBody Schema schema, @PathVariable int id) {
         LOGGER.info("Updating Schema with ID: " + id);
-        int updatedSchemaId = schemaService.updateDetail(schema, id);
+        int updatedSchemaId = schemaService.updateSchema(schema, id);
         LOGGER.info("Schema with ID: " + updatedSchemaId + "updated");
         return updatedSchemaId;
     }
@@ -57,6 +58,24 @@ public class SchemaController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSchema(@PathVariable int id) {
         schemaService.deleteSchema(id);
+    }
+
+    @PostMapping("/{id}/add-detail")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addDetailToSchema(@Valid @RequestBody DetailSchemaRequestDto dto, @PathVariable int id) {
+        LOGGER.info(String.format("Adding new detail with ID: %s to schema with ID: %s",
+                dto.getDetailId(),
+                id));
+        schemaService.addDetailToSchema(id, dto);
+    }
+
+    @DeleteMapping("/{id}/delete-detail/{detailId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void deleteDetailFromSchema(@PathVariable int id, @PathVariable int detailId) {
+        LOGGER.info(String.format("Deleting detail with ID: %s from schema with ID: %s",
+                detailId,
+                id));
+        schemaService.deleteDetailFromSchema(id, detailId);
     }
 
 }

@@ -57,4 +57,5 @@ public class DetailController {
         detailService.deleteDetail(id);
         LOGGER.info("Detail with ID: " + id + " deleted");
     }
+
 }

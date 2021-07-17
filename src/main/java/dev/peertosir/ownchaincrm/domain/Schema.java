@@ -1,5 +1,7 @@
 package dev.peertosir.ownchaincrm.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -9,7 +11,7 @@ import java.util.List;
 @Entity
 public class Schema {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @NotBlank(message = "Title should be provided")
     private String title;
@@ -23,6 +25,7 @@ public class Schema {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonManagedReference("schema-details")
     private List<DetailSchema> details = new ArrayList<>();
 
     public Schema() {
@@ -32,7 +35,6 @@ public class Schema {
     public void addDetail(Detail detail, int amount) {
         DetailSchema detailSchema = new DetailSchema(this, detail, amount);
         details.add(detailSchema);
-        detail.getSchemas().add(detailSchema);
     }
 
     public void removeDetail(Detail detail) {
@@ -78,6 +80,14 @@ public class Schema {
 
     public void setDeveloper(String developer) {
         this.developer = developer;
+    }
+
+    public List<DetailSchema> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<DetailSchema> details) {
+        this.details = details;
     }
 
     public Schema updateWith(Schema schema) {

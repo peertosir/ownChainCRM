@@ -1,5 +1,7 @@
 package dev.peertosir.ownchaincrm.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -7,10 +9,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 public class Detail {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @NotBlank(message = "Vendor code is mandatory")
     private String vendorCode;
@@ -23,6 +26,7 @@ public class Detail {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonManagedReference("details-schema")
     private List<DetailSchema> schemas = new ArrayList<>();
 
     @NotNull(message = "Price should be provided")

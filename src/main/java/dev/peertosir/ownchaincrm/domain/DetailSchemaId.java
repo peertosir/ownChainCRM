@@ -9,32 +9,32 @@ import java.util.Objects;
 public class DetailSchemaId implements Serializable {
 
     @Column(name = "schema_id")
-    private int schemaId;
+    private long schemaId;
 
     @Column(name = "detail_id")
-    private int detailId;
+    private long detailId;
 
     public DetailSchemaId() {
     }
 
-    public DetailSchemaId(int schemaId, int detailId) {
+    public DetailSchemaId(long schemaId, long detailId) {
         this.schemaId = schemaId;
         this.detailId = detailId;
     }
 
-    public int getSchemaId() {
+    public long getSchemaId() {
         return schemaId;
     }
 
-    public void setSchemaId(int schemaId) {
+    public void setSchemaId(long schemaId) {
         this.schemaId = schemaId;
     }
 
-    public int getDetailId() {
+    public long getDetailId() {
         return detailId;
     }
 
-    public void setDetailId(int detailId) {
+    public void setDetailId(long detailId) {
         this.detailId = detailId;
     }
 

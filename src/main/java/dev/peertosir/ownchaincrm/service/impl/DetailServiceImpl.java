@@ -3,6 +3,7 @@ package dev.peertosir.ownchaincrm.service.impl;
 import dev.peertosir.ownchaincrm.domain.Detail;
 import dev.peertosir.ownchaincrm.repository.DetailRepository;
 import dev.peertosir.ownchaincrm.service.DetailService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class DetailServiceImpl implements DetailService {
     }
 
     @Override
-    public Detail getDetailById(int id) {
+    public Detail getDetailById(long id) {
         Optional<Detail> detail = detailRepository.findById(id);
         if (detail.isPresent()) {
             return detail.get();
@@ -36,21 +37,21 @@ public class DetailServiceImpl implements DetailService {
     }
 
     @Override
-    public int createDetail(Detail detail) {
+    public long createDetail(Detail detail) {
          detail = detailRepository.save(detail);
          return detail.getId();
     }
 
     @Override
-    public int updateDetail(Detail updatedDetail, int id) {
-        Detail detail = getDetailById(id).updateWith(updatedDetail);
+    public long updateDetail(Detail updatedDetail, long id) {
+        Detail detail = getDetailById(id);
+        BeanUtils.copyProperties(updatedDetail, detail,"id", "schemas");
         detailRepository.save(detail);
         return id;
     }
 
-
     @Override
-    public void deleteDetail(int id) {
+    public void deleteDetail(long id) {
         Detail detail = detailRepository.getById(id);
         detailRepository.delete(detail);
     }

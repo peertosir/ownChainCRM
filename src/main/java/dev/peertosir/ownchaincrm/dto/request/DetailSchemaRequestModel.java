@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 public class DetailSchemaRequestModel {
     @NotNull(message = "detailId should be provided")
-    private int detailId;
+    private long detailId;
     @NotNull(message = "amount should be provided")
     @Range(min=1, max=500, message = "Amount should be in range [0, 500]")
     private int amount;
@@ -15,11 +15,11 @@ public class DetailSchemaRequestModel {
     public DetailSchemaRequestModel() {
     }
 
-    public int getDetailId() {
+    public long getDetailId() {
         return detailId;
     }
 
-    public void setDetailId(int detailId) {
+    public void setDetailId(long detailId) {
         this.detailId = detailId;
     }
 

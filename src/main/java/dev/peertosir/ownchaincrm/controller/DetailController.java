@@ -29,30 +29,30 @@ public class DetailController {
     }
 
     @GetMapping("/{id}")
-    public Detail getDetail(@PathVariable int id) {
+    public Detail getDetail(@PathVariable long id) {
         LOGGER.info("Getting Detail with ID: " + id);
         return detailService.getDetailById(id);
     }
 
     @PostMapping("")
-    public int getAllDetails(@Valid @RequestBody Detail detail) {
+    public long createDetail(@Valid @RequestBody Detail detail) {
         LOGGER.info("Creating Detail");
-        int createdDetailId = detailService.createDetail(detail);
+        long createdDetailId = detailService.createDetail(detail);
         LOGGER.info("Created Detail with ID: " + createdDetailId);
         return createdDetailId;
     }
 
     @PutMapping("/{id}")
-    public int updateDetail(@Valid @RequestBody Detail detail, @PathVariable int id) {
+    public long updateDetail(@Valid @RequestBody Detail detail, @PathVariable long id) {
         LOGGER.info("Updating Detail with ID: " + id);
-        int updatedDetailId = detailService.updateDetail(detail, id);
-        LOGGER.info("Detail with ID: " + updatedDetailId + "updated");
+        long updatedDetailId = detailService.updateDetail(detail, id);
+        LOGGER.info("Detail with ID: " + updatedDetailId + " updated");
         return updatedDetailId;
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteDetail(@PathVariable int id) {
+    public void deleteDetail(@PathVariable long id) {
         LOGGER.info("Deleting Detail with ID: " + id);
         detailService.deleteDetail(id);
         LOGGER.info("Detail with ID: " + id + " deleted");

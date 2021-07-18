@@ -6,9 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -16,7 +14,7 @@ import java.util.Set;
 public class Detail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
     @NotBlank(message = "Vendor code is mandatory")
     private String vendorCode;
     @NotBlank(message = "Title is mandatory")
@@ -37,11 +35,11 @@ public class Detail {
     public Detail() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -83,13 +81,5 @@ public class Detail {
 
     public void setSchemas(Set<DetailSchema> schemas) {
         this.schemas = schemas;
-    }
-
-    public Detail updateWith(Detail newDetail) {
-        this.setVendorCode(newDetail.getVendorCode());
-        this.setTitle(newDetail.getTitle());
-        this.setDescription(newDetail.getDescription());
-        this.setPrice(newDetail.getPrice());
-        return this;
     }
 }

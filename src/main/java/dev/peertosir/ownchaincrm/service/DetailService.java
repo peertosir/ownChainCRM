@@ -7,11 +7,11 @@ import java.util.List;
 public interface DetailService {
     List<Detail> getAllDetails();
 
-    Detail getDetailById(int id);
+    Detail getDetailById(long id);
 
-    int createDetail(Detail detail);
+    long createDetail(Detail detail);
 
-    int updateDetail(Detail updatedDetail, int id);
+    long updateDetail(Detail updatedDetail, long id);
 
-    void deleteDetail(int id);
+    void deleteDetail(long id);
 }

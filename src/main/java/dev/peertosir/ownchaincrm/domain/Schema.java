@@ -10,7 +10,7 @@ import java.util.*;
 public class Schema {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
     @NotBlank(message = "Title should be provided")
     private String title;
     @NotBlank(message = "Vendor code should be provided")
@@ -30,11 +30,11 @@ public class Schema {
 
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -68,13 +68,5 @@ public class Schema {
 
     public void setDetails(Set<DetailSchema> details) {
         this.details = details;
-    }
-
-    public Schema updateWith(Schema schema) {
-        this.setVendorCode(schema.getVendorCode());
-        this.setTitle(schema.getTitle());
-        this.setVendorCode(schema.getVendorCode());
-        this.setDeveloper(schema.getDeveloper());
-        return this;
     }
 }

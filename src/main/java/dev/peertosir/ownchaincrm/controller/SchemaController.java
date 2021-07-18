@@ -32,7 +32,7 @@ public class SchemaController {
     }
 
     @GetMapping("/{id}")
-    public Schema getSchema(@PathVariable int id) {
+    public Schema getSchema(@PathVariable long id) {
         LOGGER.info("Getting Schema with ID: " + id);
         Schema schema = schemaService.getSchemaById(id);
         LOGGER.info("Schema with ID: " + id + " found. Returning...");
@@ -40,24 +40,24 @@ public class SchemaController {
     }
 
     @PostMapping("")
-    public int createSchema(@Valid @RequestBody Schema schema) {
+    public long createSchema(@Valid @RequestBody Schema schema) {
         LOGGER.info("Creating new Schema");
-        int createdSchemaId = schemaService.createSchema(schema);
+        Long createdSchemaId = schemaService.createSchema(schema);
         LOGGER.info("New Schema with ID: " + createdSchemaId + " created");
         return createdSchemaId;
     }
 
     @PutMapping("/{id}")
-    public int updateSchema(@Valid @RequestBody Schema schema, @PathVariable int id) {
+    public long updateSchema(@Valid @RequestBody Schema schema, @PathVariable long id) {
         LOGGER.info("Updating Schema with ID: " + id);
-        int updatedSchemaId = schemaService.updateSchema(schema, id);
+        long updatedSchemaId = schemaService.updateSchema(schema, id);
         LOGGER.info("Schema with ID: " + updatedSchemaId + " updated");
         return updatedSchemaId;
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSchema(@PathVariable int id) {
+    public void deleteSchema(@PathVariable long id) {
         schemaService.deleteSchema(id);
     }
 
@@ -65,7 +65,7 @@ public class SchemaController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addDetailToSchema(
             @Valid @RequestBody DetailSchemaRequestModel dto,
-            @PathVariable int id) {
+            @PathVariable long id) {
         LOGGER.info(String.format("Adding new detail with ID: %s to schema with ID: %s",
                 dto.getDetailId(),
                 id));
@@ -75,8 +75,8 @@ public class SchemaController {
     @DeleteMapping("/{id}/detail/{detailId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void deleteDetailFromSchema(
-            @PathVariable int id,
-            @PathVariable int detailId) {
+            @PathVariable long id,
+            @PathVariable long detailId) {
         LOGGER.info(String.format("Deleting detail with ID: %s from schema with ID: %s",
                 detailId,
                 id));
@@ -86,8 +86,8 @@ public class SchemaController {
     @PutMapping("/{id}/detail/{detailId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateDetailInSchema(
-            @PathVariable int id,
-            @PathVariable int detailId,
+            @PathVariable long id,
+            @PathVariable long detailId,
             @Valid @RequestBody DetailAmountInSchemaRequestModel amount) {
         LOGGER.info(String.format("Updating detail with ID: %s from schema with ID: %s",
                 detailId,

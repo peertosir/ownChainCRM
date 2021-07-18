@@ -10,6 +10,7 @@ import dev.peertosir.ownchaincrm.repository.DetailSchemaRepository;
 import dev.peertosir.ownchaincrm.repository.SchemaRepository;
 import dev.peertosir.ownchaincrm.service.DetailService;
 import dev.peertosir.ownchaincrm.service.SchemaService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class SchemaServiceImpl implements SchemaService {
     }
 
     @Override
-    public Schema getSchemaById(int id) {
+    public Schema getSchemaById(long id) {
         Optional<Schema> schema = schemaRepository.findById(id);
         if (schema.isPresent()) {
             return schema.get();
@@ -49,25 +50,26 @@ public class SchemaServiceImpl implements SchemaService {
     }
 
     @Override
-    public int createSchema(Schema schema) {
+    public long createSchema(Schema schema) {
         return schemaRepository.save(schema).getId();
     }
 
     @Override
-    public void deleteSchema(int id) {
+    public void deleteSchema(long id) {
         Schema schema = getSchemaById(id);
         schemaRepository.delete(schema);
     }
 
     @Override
-    public int updateSchema(Schema updatedSchema, int id) {
-        Schema schema = getSchemaById(id).updateWith(updatedSchema);
+    public long updateSchema(Schema updatedSchema, long id) {
+        Schema schema = getSchemaById(id);
+        BeanUtils.copyProperties(updatedSchema, schema, "id", "details");
         schemaRepository.save(schema);
         return id;
     }
 
     @Override
-    public void addDetailToSchema(int id, DetailSchemaRequestModel dto) {
+    public void addDetailToSchema(long id, DetailSchemaRequestModel dto) {
         Schema schema = getSchemaById(id);
         Detail detail = detailService.getDetailById(dto.getDetailId());
         DetailSchema detailSchema = new DetailSchema(schema, detail, dto.getAmount());
@@ -75,19 +77,19 @@ public class SchemaServiceImpl implements SchemaService {
     }
 
     @Override
-    public void deleteDetailFromSchema(int id, int detailId) {
+    public void deleteDetailFromSchema(long id, long detailId) {
         DetailSchema detailSchema = findDetailInSchema(id, detailId);
         detailSchemaRepository.delete(detailSchema);
     }
 
     @Override
-    public void updateDetailInSchema(int id, int detailId, DetailAmountInSchemaRequestModel model) {
+    public void updateDetailInSchema(long id, long detailId, DetailAmountInSchemaRequestModel model) {
         DetailSchema detailSchema = findDetailInSchema(id, detailId);
         detailSchema.setAmount(model.getAmount());
         detailSchemaRepository.save(detailSchema);
     }
 
-    private DetailSchema findDetailInSchema(int schemaId, int detailId) {
+    private DetailSchema findDetailInSchema(long schemaId, long detailId) {
         Optional<DetailSchema> detailSchema = detailSchemaRepository.findById(new DetailSchemaId(schemaId, detailId));
         if (detailSchema.isPresent()) {
             return detailSchema.get();

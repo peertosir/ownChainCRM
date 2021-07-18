@@ -9,17 +9,17 @@ import java.util.List;
 public interface SchemaService {
     List<Schema> getAllSchemas();
 
-    Schema getSchemaById(int id);
+    Schema getSchemaById(long id);
 
-    int createSchema(Schema schema);
+    long createSchema(Schema schema);
 
-    void deleteSchema(int id);
+    void deleteSchema(long id);
 
-    int updateSchema(Schema schema, int id);
+    long updateSchema(Schema schema, long id);
 
-    void addDetailToSchema(int id, DetailSchemaRequestModel dto);
+    void addDetailToSchema(long id, DetailSchemaRequestModel dto);
 
-    void deleteDetailFromSchema(int id, int detailId);
+    void deleteDetailFromSchema(long id, long detailId);
 
-    void updateDetailInSchema(int id, int detailId, DetailAmountInSchemaRequestModel model);
+    void updateDetailInSchema(long id, long detailId, DetailAmountInSchemaRequestModel model);
 }

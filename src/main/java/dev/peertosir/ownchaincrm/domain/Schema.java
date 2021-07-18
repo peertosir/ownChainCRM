@@ -1,5 +1,6 @@
 package dev.peertosir.ownchaincrm.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -25,6 +26,10 @@ public class Schema {
     )
     @JsonManagedReference("schema-details")
     private Set<DetailSchema> details = new HashSet<>();
+
+    @OneToOne(mappedBy = "schema", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JsonBackReference("product-schema")
+    private Product product;
 
     public Schema() {
 
@@ -68,5 +73,13 @@ public class Schema {
 
     public void setDetails(Set<DetailSchema> details) {
         this.details = details;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

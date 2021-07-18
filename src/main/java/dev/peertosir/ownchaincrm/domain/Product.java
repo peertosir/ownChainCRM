@@ -1,5 +1,6 @@
 package dev.peertosir.ownchaincrm.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Range;
 
@@ -14,9 +15,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(optional = false, cascade = CascadeType.PERSIST )
+    @OneToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "schema_id", referencedColumnName = "id", nullable = false, unique = false)
     @NotNull
+    @JsonManagedReference("product-schema")
     private Schema schema;
 
     @ColumnDefault("false")

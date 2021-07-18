@@ -52,7 +52,7 @@ public class DetailServiceImpl implements DetailService {
 
     @Override
     public void deleteDetail(long id) {
-        Detail detail = detailRepository.getById(id);
+        Detail detail = getDetailById(id);
         detailRepository.delete(detail);
     }
 }

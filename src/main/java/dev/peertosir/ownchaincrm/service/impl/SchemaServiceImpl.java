@@ -57,13 +57,14 @@ public class SchemaServiceImpl implements SchemaService {
     @Override
     public void deleteSchema(long id) {
         Schema schema = getSchemaById(id);
+        checkIfProductLinked(schema);
         schemaRepository.delete(schema);
     }
 
     @Override
     public long updateSchema(Schema updatedSchema, long id) {
         Schema schema = getSchemaById(id);
-        BeanUtils.copyProperties(updatedSchema, schema, "id", "details");
+        BeanUtils.copyProperties(updatedSchema, schema, "id", "details", "product");
         schemaRepository.save(schema);
         return id;
     }
@@ -100,5 +101,15 @@ public class SchemaServiceImpl implements SchemaService {
                         schemaId,
                         detailId)
         );
+    }
+
+    private void checkIfProductLinked(Schema schema) {
+        if (schema.getProduct() != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(
+                    "Schema ID: %s is linked with product ID: %s",
+                    schema.getId(),
+                    schema.getProduct().getId())
+            );
+        }
     }
 }

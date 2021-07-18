@@ -1,7 +1,8 @@
 package dev.peertosir.ownchaincrm.controller;
 
 import dev.peertosir.ownchaincrm.domain.Schema;
-import dev.peertosir.ownchaincrm.dto.request.DetailSchemaRequestDto;
+import dev.peertosir.ownchaincrm.dto.request.DetailAmountInSchemaRequestModel;
+import dev.peertosir.ownchaincrm.dto.request.DetailSchemaRequestModel;
 import dev.peertosir.ownchaincrm.service.SchemaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public class SchemaController {
     public int updateSchema(@Valid @RequestBody Schema schema, @PathVariable int id) {
         LOGGER.info("Updating Schema with ID: " + id);
         int updatedSchemaId = schemaService.updateSchema(schema, id);
-        LOGGER.info("Schema with ID: " + updatedSchemaId + "updated");
+        LOGGER.info("Schema with ID: " + updatedSchemaId + " updated");
         return updatedSchemaId;
     }
 
@@ -60,22 +61,37 @@ public class SchemaController {
         schemaService.deleteSchema(id);
     }
 
-    @PostMapping("/{id}/add-detail")
+    @PostMapping("/{id}/detail")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addDetailToSchema(@Valid @RequestBody DetailSchemaRequestDto dto, @PathVariable int id) {
+    public void addDetailToSchema(
+            @Valid @RequestBody DetailSchemaRequestModel dto,
+            @PathVariable int id) {
         LOGGER.info(String.format("Adding new detail with ID: %s to schema with ID: %s",
                 dto.getDetailId(),
                 id));
         schemaService.addDetailToSchema(id, dto);
     }
 
-    @DeleteMapping("/{id}/delete-detail/{detailId}")
+    @DeleteMapping("/{id}/detail/{detailId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void deleteDetailFromSchema(@PathVariable int id, @PathVariable int detailId) {
+    public void deleteDetailFromSchema(
+            @PathVariable int id,
+            @PathVariable int detailId) {
         LOGGER.info(String.format("Deleting detail with ID: %s from schema with ID: %s",
                 detailId,
                 id));
         schemaService.deleteDetailFromSchema(id, detailId);
     }
 
+    @PutMapping("/{id}/detail/{detailId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateDetailInSchema(
+            @PathVariable int id,
+            @PathVariable int detailId,
+            @Valid @RequestBody DetailAmountInSchemaRequestModel amount) {
+        LOGGER.info(String.format("Updating detail with ID: %s from schema with ID: %s",
+                detailId,
+                id));
+        schemaService.updateDetailInSchema(id, detailId, amount);
+    }
 }

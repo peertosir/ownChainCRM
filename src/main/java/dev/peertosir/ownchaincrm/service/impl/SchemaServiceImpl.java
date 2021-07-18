@@ -1,8 +1,12 @@
 package dev.peertosir.ownchaincrm.service.impl;
 
 import dev.peertosir.ownchaincrm.domain.Detail;
+import dev.peertosir.ownchaincrm.domain.DetailSchema;
+import dev.peertosir.ownchaincrm.domain.DetailSchemaId;
 import dev.peertosir.ownchaincrm.domain.Schema;
-import dev.peertosir.ownchaincrm.dto.request.DetailSchemaRequestDto;
+import dev.peertosir.ownchaincrm.dto.request.DetailAmountInSchemaRequestModel;
+import dev.peertosir.ownchaincrm.dto.request.DetailSchemaRequestModel;
+import dev.peertosir.ownchaincrm.repository.DetailSchemaRepository;
 import dev.peertosir.ownchaincrm.repository.SchemaRepository;
 import dev.peertosir.ownchaincrm.service.DetailService;
 import dev.peertosir.ownchaincrm.service.SchemaService;
@@ -18,14 +22,17 @@ import java.util.Optional;
 public class SchemaServiceImpl implements SchemaService {
     private final SchemaRepository schemaRepository;
     private final DetailService detailService;
+    private final DetailSchemaRepository detailSchemaRepository;
 
     @Autowired
     public SchemaServiceImpl(
             SchemaRepository schemaRepository,
-            DetailService detailService
+            DetailService detailService,
+            DetailSchemaRepository detailSchemaRepository
             ) {
         this.schemaRepository = schemaRepository;
         this.detailService = detailService;
+        this.detailSchemaRepository = detailSchemaRepository;
     }
 
     public List<Schema> getAllSchemas() {
@@ -38,7 +45,7 @@ public class SchemaServiceImpl implements SchemaService {
         if (schema.isPresent()) {
             return schema.get();
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schema with ID: " + id + "not found");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schema with ID: " + id + " not found");
     }
 
     @Override
@@ -60,18 +67,36 @@ public class SchemaServiceImpl implements SchemaService {
     }
 
     @Override
-    public void addDetailToSchema(int id, DetailSchemaRequestDto dto) {
+    public void addDetailToSchema(int id, DetailSchemaRequestModel dto) {
         Schema schema = getSchemaById(id);
         Detail detail = detailService.getDetailById(dto.getDetailId());
-        schema.addDetail(detail, dto.getAmount());
-        schemaRepository.save(schema);
+        DetailSchema detailSchema = new DetailSchema(schema, detail, dto.getAmount());
+        detailSchemaRepository.save(detailSchema);
     }
 
     @Override
     public void deleteDetailFromSchema(int id, int detailId) {
-        Schema schema = getSchemaById(id);
-        Detail detail = detailService.getDetailById(detailId);
-        schema.removeDetail(detail);
-        schemaRepository.save(schema);
+        DetailSchema detailSchema = findDetailInSchema(id, detailId);
+        detailSchemaRepository.delete(detailSchema);
+    }
+
+    @Override
+    public void updateDetailInSchema(int id, int detailId, DetailAmountInSchemaRequestModel model) {
+        DetailSchema detailSchema = findDetailInSchema(id, detailId);
+        detailSchema.setAmount(model.getAmount());
+        detailSchemaRepository.save(detailSchema);
+    }
+
+    private DetailSchema findDetailInSchema(int schemaId, int detailId) {
+        Optional<DetailSchema> detailSchema = detailSchemaRepository.findById(new DetailSchemaId(schemaId, detailId));
+        if (detailSchema.isPresent()) {
+            return detailSchema.get();
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                String.format("Schema with ID %s doens't have detail with ID: %s",
+                        schemaId,
+                        detailId)
+        );
     }
 }

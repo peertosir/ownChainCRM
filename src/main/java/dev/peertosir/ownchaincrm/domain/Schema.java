@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Schema {
@@ -26,28 +24,10 @@ public class Schema {
             orphanRemoval = true
     )
     @JsonManagedReference("schema-details")
-    private List<DetailSchema> details = new ArrayList<>();
+    private Set<DetailSchema> details = new HashSet<>();
 
     public Schema() {
 
-    }
-
-    public void addDetail(Detail detail, int amount) {
-        DetailSchema detailSchema = new DetailSchema(this, detail, amount);
-        details.add(detailSchema);
-    }
-
-    public void removeDetail(Detail detail) {
-        for (Iterator<DetailSchema> iterator = this.details.iterator(); iterator.hasNext();) {
-            DetailSchema detailSchema = iterator.next();
-
-            if (detailSchema.getDetail().equals(detail) && detailSchema.getSchema().equals(this)) {
-                iterator.remove();
-                detailSchema.getDetail().getSchemas().remove(detailSchema);
-                detailSchema.setDetail(null);
-                detailSchema.setSchema(null);
-            }
-        }
     }
 
     public int getId() {
@@ -82,11 +62,11 @@ public class Schema {
         this.developer = developer;
     }
 
-    public List<DetailSchema> getDetails() {
+    public Set<DetailSchema> getDetails() {
         return details;
     }
 
-    public void setDetails(List<DetailSchema> details) {
+    public void setDetails(Set<DetailSchema> details) {
         this.details = details;
     }
 

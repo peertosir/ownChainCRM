@@ -7,7 +7,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -27,7 +29,7 @@ public class Detail {
             orphanRemoval = true
     )
     @JsonManagedReference("details-schema")
-    private List<DetailSchema> schemas = new ArrayList<>();
+    private Set<DetailSchema> schemas = new HashSet<>();
 
     @NotNull(message = "Price should be provided")
     private BigDecimal price;
@@ -75,11 +77,11 @@ public class Detail {
         this.price = price;
     }
 
-    public List<DetailSchema> getSchemas() {
+    public Set<DetailSchema> getSchemas() {
         return schemas;
     }
 
-    public void setSchemas(List<DetailSchema> schemas) {
+    public void setSchemas(Set<DetailSchema> schemas) {
         this.schemas = schemas;
     }
 
@@ -87,6 +89,7 @@ public class Detail {
         this.setVendorCode(newDetail.getVendorCode());
         this.setTitle(newDetail.getTitle());
         this.setDescription(newDetail.getDescription());
+        this.setPrice(newDetail.getPrice());
         return this;
     }
 }

@@ -1,6 +1,7 @@
 package dev.peertosir.ownchaincrm.domain;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,7 +15,7 @@ public class Product {
     private Long id;
 
     @OneToOne(optional = false, cascade = CascadeType.PERSIST )
-    @JoinColumn(name = "schema_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "schema_id", referencedColumnName = "id", nullable = false, unique = false)
     @NotNull
     private Schema schema;
 
@@ -25,8 +26,10 @@ public class Product {
     private String title;
 
     @NotNull(message = "Price should be provided")
+    @Range(min=1, max=2000000000, message = "Price should be in range [0, 2000000000]")
     private BigDecimal price;
 
+    @Range(min=1, max=9000, message = "Amount should be in range [0, 500]")
     private int hoursToProduce;
 
     public Product() {
